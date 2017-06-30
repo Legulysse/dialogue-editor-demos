@@ -15,5 +15,8 @@ class UDemoGameInstance : public UGameInstance
 public:
 
 	UPROPERTY()
+	class UDemoDialogueManager* DialogueManager;
+
+	UPROPERTY()
 	TArray<class UDemoInteractionComponent*> ListInteractibles;
 };

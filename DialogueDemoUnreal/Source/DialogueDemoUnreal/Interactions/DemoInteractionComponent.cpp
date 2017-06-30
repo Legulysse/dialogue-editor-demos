@@ -1,7 +1,9 @@
 #include "Interactions/DemoInteractionComponent.h"
 
 #include "Kismet/GameplayStatics.h"
+
 #include "DemoGameInstance.h"
+#include "Dialogue/DemoDialogueManager.h"
 
 
 UDemoInteractionComponent::UDemoInteractionComponent(const FObjectInitializer& ObjectInitializer)
@@ -21,6 +23,11 @@ void UDemoInteractionComponent::InitializeComponent()
 	}
 }
 
-void UDemoInteractionComponent::Use()
+void UDemoInteractionComponent::PlayerInteract(ADemoPlayerCharacter* Player)
 {
+	UDemoGameInstance*GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetOwner()));
+	if (GameInstance)
+	{
+		GameInstance->DialogueManager->StartDialogue();
+	}
 }

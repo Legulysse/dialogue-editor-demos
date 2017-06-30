@@ -61,6 +61,12 @@ void ADemoPlayerCharacter::UpdateHUD()
 
 void ADemoPlayerCharacter::OnInteract()
 {
+	if (NearestInteraction)
+	{
+		NearestInteraction->PlayerInteract(this);
+
+		NearestInteraction = nullptr;
+	}
 }
 
 void ADemoPlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)

@@ -11,7 +11,7 @@ class UDemoInteractionComponent : public USphereComponent
 public:
 
 	UFUNCTION(BlueprintCallable, Category = Interaction)
-	void Use();
+	void PlayerInteract(class ADemoPlayerCharacter* Player);
 
 protected:
 
