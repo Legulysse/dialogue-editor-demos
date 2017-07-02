@@ -1,17 +1,18 @@
 #include "DemoGameInstance.h"
 
+#include "Engine/World.h"
+
 #include "Dialogue/DemoDialogueManager.h"
 
 
 UDemoGameInstance::UDemoGameInstance(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	//DialogueManager = CreateDefaultSubobject<UDemoDialogueManager>("DialogueManager");
 }
 
 void UDemoGameInstance::Init()
 {
-    DialogueManager = NewObject<UDemoDialogueManager>(Cast<UObject>(GetWorld()), "DialogueManager");
+    DialogueManager = NewObject<UDemoDialogueManager>(GetWorld(), "DialogueManager");
 }
 
 void UDemoGameInstance::Shutdown()
