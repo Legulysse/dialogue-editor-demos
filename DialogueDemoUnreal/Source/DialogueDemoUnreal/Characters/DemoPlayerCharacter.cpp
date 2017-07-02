@@ -45,6 +45,10 @@ void ADemoPlayerCharacter::UpdateInteractions()
 	UDemoGameInstance* GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(this));
 
 	NearestInteraction = nullptr;
+
+    if (IsInDialogue())
+        return;
+
 	for (UDemoInteractionComponent* Interaction : GameInstance->ListInteractibles)
 	{
 		if (Interaction->IsOverlappingActor(this))
@@ -67,6 +71,16 @@ void ADemoPlayerCharacter::OnInteract()
 
 		NearestInteraction = nullptr;
 	}
+}
+
+void ADemoPlayerCharacter::OnDialogueStarted(class UDemoDialogueInstance* DialogueInstance)
+{
+    Super::OnDialogueStarted(DialogueInstance);
+}
+
+void ADemoPlayerCharacter::OnDialogueFinished(class UDemoDialogueInstance* DialogueInstance)
+{
+    Super::OnDialogueFinished(DialogueInstance);
 }
 
 void ADemoPlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)

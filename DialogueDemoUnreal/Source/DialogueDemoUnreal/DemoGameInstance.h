@@ -14,6 +14,14 @@ class UDemoGameInstance : public UGameInstance
 
 public:
 
+    virtual void Init() override;
+    virtual void Shutdown() override;
+
+public:
+
+    UPROPERTY(BlueprintReadWrite, Category = DemoGameInstance)
+    class UDemoHUD* HUD;
+
 	UPROPERTY()
 	class UDemoDialogueManager* DialogueManager;
 

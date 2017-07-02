@@ -3,6 +3,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "DemoGameInstance.h"
+#include "Characters/DemoPlayerCharacter.h"
 #include "Dialogue/DemoDialogueManager.h"
 
 
@@ -28,6 +29,9 @@ void UDemoInteractionComponent::PlayerInteract(ADemoPlayerCharacter* Player)
 	UDemoGameInstance*GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetOwner()));
 	if (GameInstance)
 	{
-		GameInstance->DialogueManager->StartDialogue();
+        FDialogueParams Params;
+        Params.Actors.Add(Player);
+        Params.Actors.Add(Cast<ADemoBaseCharacter>(GetOwner()));
+		GameInstance->DialogueManager->StartDialogue(Params);
 	}
 }

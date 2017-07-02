@@ -34,6 +34,21 @@ ADemoBaseCharacter::ADemoBaseCharacter(const FObjectInitializer& ObjectInitializ
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
 
+void ADemoBaseCharacter::OnDialogueStarted(class UDemoDialogueInstance* DialogueInstance)
+{
+    CurrentDialogue = DialogueInstance;
+}
+
+void ADemoBaseCharacter::OnDialogueFinished(class UDemoDialogueInstance* DialogueInstance)
+{
+    CurrentDialogue = nullptr;
+}
+
+bool ADemoBaseCharacter::IsInDialogue() const
+{
+    return CurrentDialogue != nullptr;
+}
+
 void ADemoBaseCharacter::OnResetVR()
 {
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();

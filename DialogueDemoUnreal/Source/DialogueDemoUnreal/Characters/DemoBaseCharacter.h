@@ -11,6 +11,13 @@ class ADemoBaseCharacter : public ACharacter
 {
 	GENERATED_UCLASS_BODY()
 
+public:
+
+    virtual void OnDialogueStarted(class UDemoDialogueInstance* DialogueInstance);
+    virtual void OnDialogueFinished(class UDemoDialogueInstance* DialogueInstance);
+
+    bool IsInDialogue() const;
+
 protected:
 
 	/** Resets HMD orientation in VR. */
@@ -49,4 +56,7 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = DemoCharacter)
+    class UDemoDialogueInstance* CurrentDialogue;
 };

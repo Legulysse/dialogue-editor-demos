@@ -13,6 +13,9 @@ class ADemoPlayerCharacter : public ADemoBaseCharacter
 
 public:
 
+    virtual void OnDialogueStarted(class UDemoDialogueInstance* DialogueInstance) override;
+    virtual void OnDialogueFinished(class UDemoDialogueInstance* DialogueInstance) override;
+
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
