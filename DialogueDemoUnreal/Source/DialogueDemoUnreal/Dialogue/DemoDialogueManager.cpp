@@ -38,5 +38,5 @@ bool UDemoDialogueManager::IsTickable() const
 
 TStatId UDemoDialogueManager::GetStatId() const
 {
-    return TStatId();
+    return GetStatID();
 }
