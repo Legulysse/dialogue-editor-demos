@@ -26,7 +26,7 @@ void UDemoInteractionComponent::InitializeComponent()
 
 void UDemoInteractionComponent::PlayerInteract(ADemoPlayerCharacter* Player)
 {
-	UDemoGameInstance*GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetOwner()));
+	UDemoGameInstance* GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetOwner()));
 	if (GameInstance)
 	{
         FDialogueParams Params;

@@ -22,7 +22,7 @@ public:
     UPROPERTY(BlueprintReadWrite, Category = DemoGameInstance)
     class UDemoHUD* HUD;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, Category = DemoGameInstance)
 	class UDemoDialogueManager* DialogueManager;
 
 	UPROPERTY()

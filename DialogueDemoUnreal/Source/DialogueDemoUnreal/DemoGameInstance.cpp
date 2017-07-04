@@ -12,10 +12,14 @@ UDemoGameInstance::UDemoGameInstance(const FObjectInitializer& ObjectInitializer
 
 void UDemoGameInstance::Init()
 {
-    DialogueManager = NewObject<UDemoDialogueManager>(GetWorld(), "DialogueManager");
+	Super::Init();
+
+    DialogueManager = NewObject<UDemoDialogueManager>(this, "DialogueManager");
 }
 
 void UDemoGameInstance::Shutdown()
 {
     DialogueManager = nullptr;
+
+	Super::Shutdown();
 }
