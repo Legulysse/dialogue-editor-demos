@@ -21,11 +21,10 @@ bool UDemoDialogueManager::StartDialogue(const FDialogueParams& Params)
 
 void UDemoDialogueManager::Tick(float DeltaTime)
 {
-    DialogueInstances.RemoveAll([](UDemoDialogueInstance* DialogueInstance) { return DialogueInstance->IsFinished(); });
-
     for (UDemoDialogueInstance* DialogueInstance : DialogueInstances)
     {
-        DialogueInstance->Tick(DeltaTime);
+        if (!DialogueInstance->IsFinished())
+            DialogueInstance->Tick(DeltaTime);
     }
 
     DialogueInstances.RemoveAll([](UDemoDialogueInstance* DialogueInstance) { return DialogueInstance->IsFinished(); });
