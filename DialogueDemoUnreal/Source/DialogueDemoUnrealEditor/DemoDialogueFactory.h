@@ -1,5 +1,3 @@
-// Copyright © 2015 Cyanide Studio
-
 #pragma once
 
 #include "UnrealEd.h"
@@ -22,4 +20,9 @@ class UDemoDialogueFactory : public UFactory, public FReimportHandler
 	virtual bool CanReimport(UObject* Obj, TArray<FString>& OutFilenames) override;
 	virtual void SetReimportPaths(UObject* Obj, const TArray<FString>& NewReimportPaths) override;
 	virtual EReimportResult::Type Reimport(UObject* Obj) override;
+
+protected:
+
+    void ParseGroupConditions(const TSharedPtr<FJsonObject> JSonConditionGroup, class UDemoNodeConditionGroup* NewConditionGroup);
+    class UDemoNodeCondition* ParseCondition(const TSharedPtr<FJsonObject> JSonCondition, UObject* Outer);
 };
