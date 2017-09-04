@@ -6,9 +6,9 @@ UDemoHUD::UDemoHUD(const FObjectInitializer& ObjectInitializer)
 {
 }
 
-void UDemoHUD::DisplayDialogueSentence()
+void UDemoHUD::DisplayDialogueSentence(const FDemoSentenceParams& Params)
 {
-    OnDisplayDialogueSentence();
+    OnDisplayDialogueSentence(Params);
 }
 
 void UDemoHUD::HideDialogueSentence()

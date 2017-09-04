@@ -3,6 +3,18 @@
 #include "DemoDialogueInstance.generated.h"
 
 
+USTRUCT()
+struct FDemoDialogueParams
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadWrite, Category = "Dialogue")
+	class UDemoDialogue* Dialogue;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Dialogue")
+	TArray<class ADemoBaseCharacter*> Actors;
+};
+
 UCLASS(BlueprintType)
 class UDemoDialogueInstance : public UObject
 {
@@ -10,6 +22,7 @@ class UDemoDialogueInstance : public UObject
 
 public:
 
+	void InitDialogue(const FDemoDialogueParams& Params);
     void Start();
     void Finalize();
 

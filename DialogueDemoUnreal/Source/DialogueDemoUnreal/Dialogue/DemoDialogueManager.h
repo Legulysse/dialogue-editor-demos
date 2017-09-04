@@ -1,20 +1,9 @@
 #pragma once
 
 #include "Tickable.h"
+#include "Dialogue/DemoDialogueInstance.h"
 #include "DemoDialogueManager.generated.h"
 
-
-USTRUCT()
-struct FDialogueParams
-{
-    GENERATED_BODY()
-
-    UPROPERTY()
-    class UDemoDialogue* Dialogue;
-
-    UPROPERTY()
-    TArray<class ADemoBaseCharacter*> Actors;
-};
 
 UCLASS(BlueprintType)
 class UDemoDialogueManager : public UObject, public FTickableGameObject
@@ -23,7 +12,7 @@ class UDemoDialogueManager : public UObject, public FTickableGameObject
 
 public:
 
-	bool StartDialogue(const FDialogueParams& Params);
+	bool StartDialogue(const FDemoDialogueParams& Params);
 
 protected:
 
@@ -34,5 +23,5 @@ protected:
 protected:
 
     UPROPERTY()
-    TArray<class UDemoDialogueInstance*> DialogueInstances;
+    TArray<UDemoDialogueInstance*> DialogueInstances;
 };

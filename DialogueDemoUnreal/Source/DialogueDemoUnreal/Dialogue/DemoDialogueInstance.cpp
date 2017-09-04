@@ -14,6 +14,12 @@ UDemoDialogueInstance::UDemoDialogueInstance(const FObjectInitializer& ObjectIni
 {
 }
 
+void UDemoDialogueInstance::InitDialogue(const FDemoDialogueParams& Params)
+{
+	Dialogue = Params.Dialogue;
+	Actors = Params.Actors;
+}
+
 void UDemoDialogueInstance::Start()
 {
     for (ADemoBaseCharacter* Actor : Actors)
@@ -24,7 +30,10 @@ void UDemoDialogueInstance::Start()
     UDemoGameInstance* GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetOuter()));
     if (GameInstance)
     {
-        GameInstance->HUD->DisplayDialogueSentence();
+		FDemoSentenceParams Params;
+		Params.SpeakerName = "Ominous Voice";
+		Params.SentenceText = "Hey, have you seen some Squarrels around here ?";
+        GameInstance->HUD->DisplayDialogueSentence(Params);
     }
 }
 
@@ -32,16 +41,16 @@ void UDemoDialogueInstance::Finalize()
 {
     bFinished = true;
 
-    for (ADemoBaseCharacter* Actor : Actors)
-    {
-        Actor->OnDialogueFinished(this);
-    }
-
     UDemoGameInstance* GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetOuter()));
     if (GameInstance)
     {
         GameInstance->HUD->HideDialogueSentence();
-    }
+	}
+
+	for (ADemoBaseCharacter* Actor : Actors)
+	{
+		Actor->OnDialogueFinished(this);
+	}
 }
 
 bool UDemoDialogueInstance::IsFinished() const
@@ -56,7 +65,7 @@ void UDemoDialogueInstance::Tick(float DeltaTime)
 
     Lifetime += DeltaTime;
 
-    if (Lifetime >= 5.f)
+    if (Lifetime >= 4.f)
     {
         Finalize();
     }

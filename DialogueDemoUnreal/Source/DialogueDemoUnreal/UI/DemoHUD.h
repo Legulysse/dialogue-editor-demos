@@ -4,6 +4,18 @@
 #include "DemoHUD.generated.h"
 
 
+USTRUCT()
+struct FDemoSentenceParams
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, Category = "Dialogue")
+	FString SpeakerName = "Speaker Name";
+
+	UPROPERTY(BlueprintReadOnly, Category = "Dialogue")
+	FString SentenceText = "Sentence Text";
+};
+
 UCLASS(BlueprintType)
 class UDemoHUD : public UUserWidget
 {
@@ -11,13 +23,13 @@ class UDemoHUD : public UUserWidget
 
 public:
 
-    void DisplayDialogueSentence();
+    void DisplayDialogueSentence(const FDemoSentenceParams& Params);
     void HideDialogueSentence();
 
 protected:
 
     UFUNCTION(BlueprintImplementableEvent)
-    void OnDisplayDialogueSentence();
+    void OnDisplayDialogueSentence(const FDemoSentenceParams& Params);
 
     UFUNCTION(BlueprintImplementableEvent)
     void OnHideDialogueSentence();

@@ -8,13 +8,12 @@ UDemoDialogueManager::UDemoDialogueManager(const FObjectInitializer& ObjectIniti
 {
 }
 
-bool UDemoDialogueManager::StartDialogue(const FDialogueParams& Params)
+bool UDemoDialogueManager::StartDialogue(const FDemoDialogueParams& Params)
 {
     UDemoDialogueInstance* DialogueInstance = NewObject<UDemoDialogueInstance>(GetOuter());
     DialogueInstances.Add(DialogueInstance);
 
-    DialogueInstance->Dialogue = Params.Dialogue;
-    DialogueInstance->Actors = Params.Actors;
+	DialogueInstance->InitDialogue(Params);
     DialogueInstance->Start();
 	return true;
 }

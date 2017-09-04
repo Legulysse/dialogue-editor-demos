@@ -29,7 +29,7 @@ void UDemoInteractionComponent::PlayerInteract(ADemoPlayerCharacter* Player)
 	UDemoGameInstance* GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetOwner()));
 	if (GameInstance)
 	{
-        FDialogueParams Params;
+        FDemoDialogueParams Params;
         Params.Actors.Add(Player);
         Params.Actors.Add(Cast<ADemoBaseCharacter>(GetOwner()));
 		GameInstance->DialogueManager->StartDialogue(Params);
