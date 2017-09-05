@@ -22,25 +22,37 @@ class UDemoDialogueInstance : public UObject
 
 public:
 
-	void InitDialogue(const FDemoDialogueParams& Params);
-    void Start();
-    void Finalize();
+	bool InitDialogue(const FDemoDialogueParams& Params);
+	void Start();
+	void Stop();
 
     bool IsFinished() const;
 
     void Tick(float DeltaTime);
 
+	void PlayNextNode();
+
+protected:
+
+	void Finalize();
+	void PlayNextNode(class UDemoDialogueNode* InNextNode);
+
 public:
 
-    UPROPERTY()
+    UPROPERTY(Transient)
     class UDemoDialogue* Dialogue;
 
-    UPROPERTY()
+    UPROPERTY(Transient)
     TArray<class ADemoBaseCharacter*> Actors;
 
-    UPROPERTY()
-    float Lifetime;
+protected:
 
-    UPROPERTY()
-    bool bFinished;
+	UPROPERTY(Transient)
+	class UDemoDialogueNode* CurrentNode;
+
+	UPROPERTY(Transient)
+	float Lifetime;
+
+	UPROPERTY(Transient)
+	bool bFinished;
 };

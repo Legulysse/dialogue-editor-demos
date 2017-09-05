@@ -3,6 +3,9 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "DemoGameInstance.h"
+#include "Assets/DemoDialogue.h"
+#include "Assets/DemoDialogueNode.h"
+#include "Assets/DemoDialogueNodeRoot.h"
 #include "Characters/DemoPlayerCharacter.h"
 #include "UI/DemoHUD.h"
 
@@ -14,10 +17,15 @@ UDemoDialogueInstance::UDemoDialogueInstance(const FObjectInitializer& ObjectIni
 {
 }
 
-void UDemoDialogueInstance::InitDialogue(const FDemoDialogueParams& Params)
+bool UDemoDialogueInstance::InitDialogue(const FDemoDialogueParams& Params)
 {
+	if (!Params.Dialogue)
+		return false;
+
 	Dialogue = Params.Dialogue;
 	Actors = Params.Actors;
+
+	return true;
 }
 
 void UDemoDialogueInstance::Start()
@@ -35,12 +43,30 @@ void UDemoDialogueInstance::Start()
 		Params.SentenceText = "Hey, have you seen some Squarrels around here ?";
         GameInstance->HUD->DisplayDialogueSentence(Params);
     }
+
+	if (Dialogue->RootNode && Dialogue->RootNode->IsA(UDemoDialogueNodeRoot::StaticClass()))
+	{
+		UDemoDialogueNodeRoot* Root = Cast<UDemoDialogueNodeRoot>(Dialogue->RootNode);
+
+		CurrentNode = Root;
+
+		PlayNextNode();
+	}
+	else
+	{
+		Stop();
+	}
+}
+
+void UDemoDialogueInstance::Stop()
+{
+	bFinished = true;
+
+	Finalize();
 }
 
 void UDemoDialogueInstance::Finalize()
 {
-    bFinished = true;
-
     UDemoGameInstance* GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetOuter()));
     if (GameInstance)
     {
@@ -67,6 +93,18 @@ void UDemoDialogueInstance::Tick(float DeltaTime)
 
     if (Lifetime >= 4.f)
     {
-        Finalize();
+		Stop();
     }
+}
+
+void UDemoDialogueInstance::PlayNextNode()
+{
+	if (!CurrentNode)
+		return;
+
+	PlayNextNode(CurrentNode->Next);
+}
+
+void UDemoDialogueInstance::PlayNextNode(UDemoDialogueNode* InNextNode)
+{
 }
