@@ -51,7 +51,7 @@ void ADemoPlayerCharacter::UpdateInteractions()
 
 	for (UDemoInteractionComponent* Interaction : GameInstance->ListInteractibles)
 	{
-		if (Interaction->IsOverlappingActor(this))
+		if (Interaction->CanPlayerInteract(this))
 		{
 			NearestInteraction = Interaction;
 		}
@@ -68,7 +68,6 @@ void ADemoPlayerCharacter::OnInteract()
 	if (NearestInteraction)
 	{
 		NearestInteraction->PlayerInteract(this);
-
 		NearestInteraction = nullptr;
 	}
 }

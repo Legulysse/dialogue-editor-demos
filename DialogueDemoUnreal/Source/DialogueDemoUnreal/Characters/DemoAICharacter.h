@@ -13,6 +13,9 @@ class ADemoAICharacter : public ADemoBaseCharacter
 
 public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AICharacter)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = AICharacter)
 	class UDemoInteractionComponent* InteractionComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AICharacter)
+	class UDemoDialogue* Dialogue;
 };

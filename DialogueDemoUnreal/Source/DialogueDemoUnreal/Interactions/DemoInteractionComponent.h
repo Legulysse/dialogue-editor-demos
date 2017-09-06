@@ -10,6 +10,9 @@ class UDemoInteractionComponent : public USphereComponent
 
 public:
 
+	UFUNCTION(BlueprintPure, Category = Interaction)
+	bool CanPlayerInteract(class ADemoPlayerCharacter* Player) const;
+
 	UFUNCTION(BlueprintCallable, Category = Interaction)
 	void PlayerInteract(class ADemoPlayerCharacter* Player);
 

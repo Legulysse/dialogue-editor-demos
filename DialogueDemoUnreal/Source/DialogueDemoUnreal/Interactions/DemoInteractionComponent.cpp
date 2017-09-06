@@ -3,6 +3,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "DemoGameInstance.h"
+#include "Characters/DemoAICharacter.h"
 #include "Characters/DemoPlayerCharacter.h"
 #include "Dialogue/DemoDialogueManager.h"
 
@@ -24,14 +25,33 @@ void UDemoInteractionComponent::InitializeComponent()
 	}
 }
 
+bool UDemoInteractionComponent::CanPlayerInteract(ADemoPlayerCharacter* Player) const
+{
+	if (IsOverlappingActor(Player))
+	{
+		ADemoAICharacter* CharacterOwner = Cast<ADemoAICharacter>(GetOwner());
+		if (CharacterOwner && CharacterOwner->Dialogue)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void UDemoInteractionComponent::PlayerInteract(ADemoPlayerCharacter* Player)
 {
 	UDemoGameInstance* GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetOwner()));
 	if (GameInstance)
 	{
-        FDemoDialogueParams Params;
-        Params.Actors.Add(Player);
-        Params.Actors.Add(Cast<ADemoBaseCharacter>(GetOwner()));
-		GameInstance->DialogueManager->StartDialogue(Params);
+		ADemoAICharacter* CharacterOwner = Cast<ADemoAICharacter>(GetOwner());
+		if (CharacterOwner && CharacterOwner->Dialogue)
+		{
+			FDemoDialogueParams Params;
+			Params.Dialogue = CharacterOwner->Dialogue;
+			Params.Actors.Add(Player);
+			Params.Actors.Add(CharacterOwner);
+			GameInstance->DialogueManager->StartDialogue(Params);
+		}
 	}
 }

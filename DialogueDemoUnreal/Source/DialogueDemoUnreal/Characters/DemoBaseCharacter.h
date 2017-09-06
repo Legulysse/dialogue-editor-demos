@@ -58,5 +58,5 @@ public:
 	float BaseLookUpRate;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = DemoCharacter)
-    class UDemoDialogueInstance* CurrentDialogue;
+    class UDemoDialogueInstance* CurrentDialogueInstance;
 };

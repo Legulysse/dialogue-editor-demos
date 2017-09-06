@@ -36,17 +36,17 @@ ADemoBaseCharacter::ADemoBaseCharacter(const FObjectInitializer& ObjectInitializ
 
 void ADemoBaseCharacter::OnDialogueStarted(class UDemoDialogueInstance* DialogueInstance)
 {
-    CurrentDialogue = DialogueInstance;
+    CurrentDialogueInstance = DialogueInstance;
 }
 
 void ADemoBaseCharacter::OnDialogueFinished(class UDemoDialogueInstance* DialogueInstance)
 {
-    CurrentDialogue = nullptr;
+	CurrentDialogueInstance = nullptr;
 }
 
 bool ADemoBaseCharacter::IsInDialogue() const
 {
-    return CurrentDialogue != nullptr;
+    return CurrentDialogueInstance != nullptr;
 }
 
 void ADemoBaseCharacter::OnResetVR()
