@@ -8,10 +8,20 @@ UDemoHUD::UDemoHUD(const FObjectInitializer& ObjectInitializer)
 
 void UDemoHUD::DisplayDialogueSentence(const FDemoSentenceParams& Params)
 {
-    OnDisplayDialogueSentence(Params);
+	ReceiveDisplayDialogueSentence(Params);
 }
 
 void UDemoHUD::HideDialogueSentence()
 {
-    OnHideDialogueSentence();
+    ReceiveHideDialogueSentence();
+}
+
+void UDemoHUD::DisplayDialogueChoice(const FDemoChoiceParams& Params)
+{
+	ReceiveDisplayDialogueChoice(Params);
+}
+
+void UDemoHUD::HideDialogueChoice()
+{
+	ReceiveHideDialogueChoice();
 }

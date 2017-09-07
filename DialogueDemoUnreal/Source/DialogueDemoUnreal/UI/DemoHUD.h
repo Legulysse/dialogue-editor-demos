@@ -16,6 +16,15 @@ struct FDemoSentenceParams
 	FString SentenceText = "Sentence Text";
 };
 
+USTRUCT()
+struct FDemoChoiceParams
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, Category = "Dialogue")
+	FString ChoiceText = "Choice Text";
+};
+
 UCLASS(BlueprintType)
 class UDemoHUD : public UUserWidget
 {
@@ -24,13 +33,21 @@ class UDemoHUD : public UUserWidget
 public:
 
     void DisplayDialogueSentence(const FDemoSentenceParams& Params);
-    void HideDialogueSentence();
+	void HideDialogueSentence();
+	void DisplayDialogueChoice(const FDemoChoiceParams& Params);
+	void HideDialogueChoice();
 
 protected:
 
     UFUNCTION(BlueprintImplementableEvent)
-    void OnDisplayDialogueSentence(const FDemoSentenceParams& Params);
+    void ReceiveDisplayDialogueSentence(const FDemoSentenceParams& Params);
 
     UFUNCTION(BlueprintImplementableEvent)
-    void OnHideDialogueSentence();
+    void ReceiveHideDialogueSentence();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ReceiveDisplayDialogueChoice(const FDemoChoiceParams& Params);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ReceiveHideDialogueChoice();
 };
