@@ -35,7 +35,10 @@ public:
 protected:
 
 	void Finalize();
-	void PlayNextNode(class UDemoDialogueNode* InNextNode);
+	void PlayNode(class UDemoDialogueNode* InNextNode);
+
+    bool CheckNodeConditions(class UDemoDialogueNode* Node) const;
+    void TriggerNodeActions(class UDemoDialogueNode* Node, bool bNodeStart);
 
 public:
 
@@ -51,7 +54,10 @@ protected:
 	class UDemoDialogueNode* CurrentNode;
 
 	UPROPERTY(Transient)
-	float Lifetime;
+    bool bWaitingDelay;
+
+    UPROPERTY(Transient)
+    float DelayNextNode;
 
 	UPROPERTY(Transient)
 	bool bFinished;

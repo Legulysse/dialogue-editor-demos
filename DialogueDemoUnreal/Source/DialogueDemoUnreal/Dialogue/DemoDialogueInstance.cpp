@@ -5,14 +5,23 @@
 #include "DemoGameInstance.h"
 #include "Assets/DemoDialogue.h"
 #include "Assets/DemoDialogueNode.h"
+#include "Assets/DemoDialogueNodeBranch.h"
+#include "Assets/DemoDialogueNodeChoice.h"
+#include "Assets/DemoDialogueNodeGoto.h"
+#include "Assets/DemoDialogueNodeReply.h"
 #include "Assets/DemoDialogueNodeRoot.h"
+#include "Assets/DemoDialogueNodeSentence.h"
+#include "Assets/Actions/DemoNodeAction.h"
+#include "Assets/Conditions/DemoNodeCondition.h"
+#include "Assets/Flags/DemoNodeFlag.h"
 #include "Characters/DemoPlayerCharacter.h"
 #include "UI/DemoHUD.h"
 
 
 UDemoDialogueInstance::UDemoDialogueInstance(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
-    , Lifetime(0.f)
+    , bWaitingDelay(false)
+    , DelayNextNode(0.f)
     , bFinished(false)
 {
 }
@@ -35,20 +44,12 @@ void UDemoDialogueInstance::Start()
         Actor->OnDialogueStarted(this);
     }
 
-    UDemoGameInstance* GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetOuter()));
-    if (GameInstance)
-    {
-		FDemoSentenceParams Params;
-		Params.SpeakerName = "Ominous Voice";
-		Params.SentenceText = "Hey, have you seen some Squarrels around here ?";
-        GameInstance->HUD->DisplayDialogueSentence(Params);
-    }
-
 	if (Dialogue->RootNode && Dialogue->RootNode->IsA(UDemoDialogueNodeRoot::StaticClass()))
 	{
 		UDemoDialogueNodeRoot* Root = Cast<UDemoDialogueNodeRoot>(Dialogue->RootNode);
 
 		CurrentNode = Root;
+        TriggerNodeActions(CurrentNode, true);
 
 		PlayNextNode();
 	}
@@ -89,11 +90,14 @@ void UDemoDialogueInstance::Tick(float DeltaTime)
     if (IsFinished())
         return;
 
-    Lifetime += DeltaTime;
-
-    if (Lifetime >= 4.f)
+    if (bWaitingDelay)
     {
-		Stop();
+        DelayNextNode -= DeltaTime;
+
+        if (DelayNextNode <= 0.f)
+        {
+            PlayNextNode();
+        }
     }
 }
 
@@ -102,9 +106,115 @@ void UDemoDialogueInstance::PlayNextNode()
 	if (!CurrentNode)
 		return;
 
-	PlayNextNode(CurrentNode->Next);
+    PlayNode(CurrentNode->Next);
 }
 
-void UDemoDialogueInstance::PlayNextNode(UDemoDialogueNode* InNextNode)
+void UDemoDialogueInstance::PlayNode(UDemoDialogueNode* NextNode)
 {
+    if (CurrentNode)
+    {
+        TriggerNodeActions(CurrentNode, false);
+
+        CurrentNode = nullptr;
+    }
+
+    bWaitingDelay = false;
+    DelayNextNode = 0.f;
+
+    if (!NextNode)
+    {
+        Stop();
+        return;
+    }
+
+    if (!NextNode->IsA(UDemoDialogueNodeReply::StaticClass()))
+    {
+        if (!CheckNodeConditions(NextNode))
+        {
+            PlayNode(NextNode->Next);
+            return;
+        }
+    }
+
+    CurrentNode = NextNode;
+
+    if (CurrentNode->IsA(UDemoDialogueNodeSentence::StaticClass()))
+    {
+        UDemoDialogueNodeSentence* NodeSentence = Cast<UDemoDialogueNodeSentence>(CurrentNode);
+
+        UDemoGameInstance* GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetOuter()));
+        if (GameInstance)
+        {
+            FDemoSentenceParams Params;
+            Params.SpeakerName = NodeSentence->SpeakerID;
+            Params.SentenceText = NodeSentence->Sentence;
+            GameInstance->HUD->DisplayDialogueSentence(Params);
+        }
+
+        bWaitingDelay = true;
+        DelayNextNode = 3.f;
+    }
+
+    TriggerNodeActions(CurrentNode, true);
+
+    if (CurrentNode->IsA(UDemoDialogueNodeChoice::StaticClass()))
+    {
+        UDemoDialogueNodeChoice* NodeChoice = Cast<UDemoDialogueNodeChoice>(CurrentNode);
+        if (NodeChoice->Replies.Num() > 0)
+            PlayNode(NodeChoice->Replies[0]);
+        else
+            PlayNextNode();
+    }
+    else if (CurrentNode->IsA(UDemoDialogueNodeReply::StaticClass()))
+    {
+        UDemoDialogueNodeReply* NodeReply = Cast<UDemoDialogueNodeReply>(CurrentNode);
+        PlayNode(NodeReply->Next);
+    }
+    else if (CurrentNode->IsA(UDemoDialogueNodeGoto::StaticClass()))
+    {
+        UDemoDialogueNodeGoto* NodeGoto = Cast<UDemoDialogueNodeGoto>(CurrentNode);
+        PlayNode(NodeGoto->Goto);
+    }
+    else if (CurrentNode->IsA(UDemoDialogueNodeBranch::StaticClass()))
+    {
+        UDemoDialogueNodeBranch* NodeBranch = Cast<UDemoDialogueNodeBranch>(CurrentNode);
+        PlayNode(NodeBranch->Branch);
+    }
+}
+
+bool UDemoDialogueInstance::CheckNodeConditions(UDemoDialogueNode* Node) const
+{
+    FDemoNodeContextCondition NodeContext;
+    NodeContext.DialogueInstance = this;
+    NodeContext.Dialogue = Dialogue;
+    NodeContext.Node = Node;
+
+    bool bValidConditions = true;
+    for (UDemoNodeCondition* Condition : Node->Conditions)
+    {
+        if (Condition->IsValid(NodeContext) != Condition->bIntendedResult)
+        {
+            bValidConditions = false;
+            break;
+        }
+    }
+
+    return bValidConditions;
+}
+
+void UDemoDialogueInstance::TriggerNodeActions(UDemoDialogueNode* Node, bool bNodeStart)
+{
+    if (!Node)
+        return;
+
+    FDemoNodeContextAction NodeContext;
+    NodeContext.DialogueInstance = this;
+    NodeContext.Dialogue = Dialogue;
+    NodeContext.Node = Node;
+
+    for (UDemoNodeAction* Action : Node->Actions)
+    {
+        if (Action->bOnNodeStart == bNodeStart)
+            Action->Execute(NodeContext);
+    }
 }
