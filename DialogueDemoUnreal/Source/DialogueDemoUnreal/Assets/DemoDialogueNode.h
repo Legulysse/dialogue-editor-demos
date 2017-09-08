@@ -3,7 +3,7 @@
 #include "DemoDialogueNode.generated.h"
 
 
-UCLASS()
+UCLASS(BlueprintType, Abstract)
 class DIALOGUEDEMOUNREAL_API UDemoDialogueNode : public UObject
 {
 	GENERATED_UCLASS_BODY()

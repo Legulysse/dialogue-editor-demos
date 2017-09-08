@@ -111,6 +111,13 @@ void UDemoDialogueInstance::PlayNextNode()
 
 void UDemoDialogueInstance::PlayNode(UDemoDialogueNode* NextNode)
 {
+	UDemoGameInstance* GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetOuter()));
+	if (!GameInstance)
+	{
+		Stop();
+		return;
+	}
+
     if (CurrentNode)
     {
         TriggerNodeActions(CurrentNode, false);
@@ -142,14 +149,11 @@ void UDemoDialogueInstance::PlayNode(UDemoDialogueNode* NextNode)
     {
         UDemoDialogueNodeSentence* NodeSentence = Cast<UDemoDialogueNodeSentence>(CurrentNode);
 
-        UDemoGameInstance* GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetOuter()));
-        if (GameInstance)
-        {
-            FDemoSentenceParams Params;
-            Params.SpeakerName = NodeSentence->SpeakerID;
-            Params.SentenceText = NodeSentence->Sentence;
-            GameInstance->HUD->DisplayDialogueSentence(Params);
-        }
+		FDemoSentenceParams Params;
+		Params.SpeakerName = NodeSentence->SpeakerID;
+		Params.SentenceText = NodeSentence->Sentence;
+		Params.NodeSentence = NodeSentence;
+		GameInstance->HUD->DisplayDialogueSentence(Params);
 
         bWaitingDelay = true;
         DelayNextNode = 3.f;
@@ -160,10 +164,16 @@ void UDemoDialogueInstance::PlayNode(UDemoDialogueNode* NextNode)
     if (CurrentNode->IsA(UDemoDialogueNodeChoice::StaticClass()))
     {
         UDemoDialogueNodeChoice* NodeChoice = Cast<UDemoDialogueNodeChoice>(CurrentNode);
-        if (NodeChoice->Replies.Num() > 0)
-            PlayNode(NodeChoice->Replies[0]);
-        else
-            PlayNextNode();
+
+		FDemoChoiceParams Params;
+		Params.ChoiceText = "Choice :";		// TODO: Handle workstring import, implies optionnal handling of choice/reply loca/voicing
+		Params.NodeChoice = NodeChoice;
+		GameInstance->HUD->DisplayDialogueChoice(Params);
+
+        //if (NodeChoice->Replies.Num() > 0)
+        //    PlayNode(NodeChoice->Replies[0]);
+        //else
+        //    PlayNextNode();
     }
     else if (CurrentNode->IsA(UDemoDialogueNodeReply::StaticClass()))
     {

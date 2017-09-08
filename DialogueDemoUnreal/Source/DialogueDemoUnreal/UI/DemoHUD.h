@@ -4,7 +4,7 @@
 #include "DemoHUD.generated.h"
 
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FDemoSentenceParams
 {
 	GENERATED_BODY()
@@ -14,15 +14,21 @@ struct FDemoSentenceParams
 
 	UPROPERTY(BlueprintReadOnly, Category = "Dialogue")
 	FString SentenceText = "Sentence Text";
+
+	UPROPERTY(BlueprintReadOnly, Category = "Dialogue")
+	const class UDemoDialogueNodeSentence* NodeSentence;
 };
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FDemoChoiceParams
 {
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintReadOnly, Category = "Dialogue")
 	FString ChoiceText = "Choice Text";
+
+	UPROPERTY(BlueprintReadOnly, Category = "Dialogue")
+	const class UDemoDialogueNodeChoice* NodeChoice;
 };
 
 UCLASS(BlueprintType)

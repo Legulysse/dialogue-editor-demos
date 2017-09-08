@@ -4,7 +4,7 @@
 #include "DemoDialogueNodeGoto.generated.h"
 
 
-UCLASS()
+UCLASS(BlueprintType)
 class DIALOGUEDEMOUNREAL_API UDemoDialogueNodeGoto : public UDemoDialogueNode
 {
 	GENERATED_UCLASS_BODY()

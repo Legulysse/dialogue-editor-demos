@@ -4,7 +4,7 @@
 #include "DemoDialogueNodeChoice.generated.h"
 
 
-UCLASS()
+UCLASS(BlueprintType)
 class DIALOGUEDEMOUNREAL_API UDemoDialogueNodeChoice : public UDemoDialogueNode
 {
 	GENERATED_UCLASS_BODY()
@@ -14,6 +14,6 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TArray< int32 > RepliesIDs;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dialogue")
 	TArray< class UDemoDialogueNodeReply* > Replies;
 };

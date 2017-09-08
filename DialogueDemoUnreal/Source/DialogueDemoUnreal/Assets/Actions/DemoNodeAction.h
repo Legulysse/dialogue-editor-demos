@@ -3,16 +3,17 @@
 #include "DemoNodeAction.generated.h"
 
 
+USTRUCT(BlueprintType)
 struct FDemoNodeContextAction
 {
-public:
+	GENERATED_BODY()
 
     class UDemoDialogueInstance* DialogueInstance;
     class UDemoDialogue* Dialogue;
     class UDemoDialogueNode* Node;
 };
 
-UCLASS()
+UCLASS(BlueprintType, Abstract)
 class DIALOGUEDEMOUNREAL_API UDemoNodeAction : public UObject
 {
 	GENERATED_UCLASS_BODY()

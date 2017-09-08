@@ -4,7 +4,7 @@
 #include "DemoNodeConditionGroup.generated.h"
 
 
-UCLASS()
+UCLASS(BlueprintType, Abstract)
 class DIALOGUEDEMOUNREAL_API UDemoNodeConditionGroup : public UDemoNodeCondition
 {
 	GENERATED_UCLASS_BODY()
