@@ -7,8 +7,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 
-#include "Interactions/DemoInteractionComponent.h"
 #include "DemoGameInstance.h"
+#include "Dialogue/DemoDialogueInstance.h"
+#include "Interactions/DemoInteractionComponent.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -72,6 +73,14 @@ void ADemoPlayerCharacter::OnInteract()
 	}
 }
 
+void ADemoPlayerCharacter::OnDialogueReply(int32 ReplyIndex)
+{
+    if (CurrentDialogueInstance)
+    {
+        CurrentDialogueInstance->ValidateReply(ReplyIndex);
+    }
+}
+
 void ADemoPlayerCharacter::OnDialogueStarted(class UDemoDialogueInstance* DialogueInstance)
 {
     Super::OnDialogueStarted(DialogueInstance);
@@ -84,12 +93,20 @@ void ADemoPlayerCharacter::OnDialogueFinished(class UDemoDialogueInstance* Dialo
 
 void ADemoPlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
-	// Set up gameplay key bindings
 	check(PlayerInputComponent);
+
+	// Set up gameplay key bindings
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ADemoPlayerCharacter::OnInteract);
+
+    PlayerInputComponent->BindAction("Reply1", IE_Pressed, this, &ADemoPlayerCharacter::OnDialogueReply<0>);
+    PlayerInputComponent->BindAction("Reply2", IE_Pressed, this, &ADemoPlayerCharacter::OnDialogueReply<1>);
+    PlayerInputComponent->BindAction("Reply3", IE_Pressed, this, &ADemoPlayerCharacter::OnDialogueReply<2>);
+    PlayerInputComponent->BindAction("Reply4", IE_Pressed, this, &ADemoPlayerCharacter::OnDialogueReply<3>);
+    PlayerInputComponent->BindAction("Reply5", IE_Pressed, this, &ADemoPlayerCharacter::OnDialogueReply<4>);
+    PlayerInputComponent->BindAction("Reply6", IE_Pressed, this, &ADemoPlayerCharacter::OnDialogueReply<5>);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ADemoPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ADemoPlayerCharacter::MoveRight);

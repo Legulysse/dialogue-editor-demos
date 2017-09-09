@@ -30,6 +30,10 @@ protected:
 	void UpdateHUD_Impl();
 
 	void OnInteract();
+    void OnDialogueReply(int32 ReplyIndex);
+
+    template<int32 ReplyIndex>
+    void OnDialogueReply() { OnDialogueReply(ReplyIndex); }
 
 	// APawn interface
 	virtual void Tick(float DeltaTime) override;

@@ -25,9 +25,6 @@ struct FDemoChoiceParams
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintReadOnly, Category = "Dialogue")
-	FString ChoiceText = "Choice Text";
-
-	UPROPERTY(BlueprintReadOnly, Category = "Dialogue")
 	const class UDemoDialogueNodeChoice* NodeChoice;
 };
 
@@ -42,6 +39,7 @@ public:
 	void HideDialogueSentence();
 	void DisplayDialogueChoice(const FDemoChoiceParams& Params);
 	void HideDialogueChoice();
+    void ValidateDialogueReply(int32 ReplyIndex);
 
 protected:
 
@@ -56,4 +54,7 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ReceiveHideDialogueChoice();
+
+    UFUNCTION(BlueprintImplementableEvent)
+    void ReceiveValidateDialogueReply(int32 ReplyIndex);
 };

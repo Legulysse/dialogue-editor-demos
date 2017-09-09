@@ -31,6 +31,7 @@ public:
     void Tick(float DeltaTime);
 
 	void PlayNextNode();
+    bool ValidateReply(int32 ReplyIndex);
 
 protected:
 

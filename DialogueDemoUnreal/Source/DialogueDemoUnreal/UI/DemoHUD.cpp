@@ -25,3 +25,8 @@ void UDemoHUD::HideDialogueChoice()
 {
 	ReceiveHideDialogueChoice();
 }
+
+void UDemoHUD::ValidateDialogueReply(int32 ReplyIndex)
+{
+    ReceiveValidateDialogueReply(ReplyIndex);
+}

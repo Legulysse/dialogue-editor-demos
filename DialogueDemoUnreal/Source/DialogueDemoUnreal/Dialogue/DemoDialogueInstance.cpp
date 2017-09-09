@@ -165,15 +165,11 @@ void UDemoDialogueInstance::PlayNode(UDemoDialogueNode* NextNode)
     {
         UDemoDialogueNodeChoice* NodeChoice = Cast<UDemoDialogueNodeChoice>(CurrentNode);
 
+        // TODO: Handle conditions on Replies
+
 		FDemoChoiceParams Params;
-		Params.ChoiceText = "Choice :";		// TODO: Handle workstring import, implies optionnal handling of choice/reply loca/voicing
 		Params.NodeChoice = NodeChoice;
 		GameInstance->HUD->DisplayDialogueChoice(Params);
-
-        //if (NodeChoice->Replies.Num() > 0)
-        //    PlayNode(NodeChoice->Replies[0]);
-        //else
-        //    PlayNextNode();
     }
     else if (CurrentNode->IsA(UDemoDialogueNodeReply::StaticClass()))
     {
@@ -190,6 +186,23 @@ void UDemoDialogueInstance::PlayNode(UDemoDialogueNode* NextNode)
         UDemoDialogueNodeBranch* NodeBranch = Cast<UDemoDialogueNodeBranch>(CurrentNode);
         PlayNode(NodeBranch->Branch);
     }
+}
+
+bool UDemoDialogueInstance::ValidateReply(int32 ReplyIndex)
+{
+    UDemoGameInstance* GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetOuter()));
+
+    UDemoDialogueNodeChoice* NodeChoice = Cast<UDemoDialogueNodeChoice>(CurrentNode);
+    if (!NodeChoice)
+        return false;
+
+    if (ReplyIndex < 0 || ReplyIndex >= NodeChoice->Replies.Num())
+        return false;
+
+    GameInstance->HUD->ValidateDialogueReply(ReplyIndex);
+
+    PlayNode(NodeChoice->Replies[ReplyIndex]);
+    return true;
 }
 
 bool UDemoDialogueInstance::CheckNodeConditions(UDemoDialogueNode* Node) const
