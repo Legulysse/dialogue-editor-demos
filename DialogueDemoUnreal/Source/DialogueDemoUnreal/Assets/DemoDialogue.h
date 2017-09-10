@@ -39,8 +39,8 @@ public:
 
 #if WITH_EDITORONLY_DATA
 
-    UPROPERTY(VisibleAnywhere, Instanced)
-	class UAssetImportData* AssetImportData;
+    UPROPERTY(VisibleAnywhere, meta = (RelativeToGameContentDir))
+    FDirectoryPath ImportPath;
 
 #endif // WITH_EDITORONLY_DATA
 

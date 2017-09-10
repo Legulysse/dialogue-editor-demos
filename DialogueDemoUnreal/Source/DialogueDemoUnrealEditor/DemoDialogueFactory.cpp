@@ -37,13 +37,15 @@ UObject* UDemoDialogueFactory::FactoryCreateText(UClass* InClass, UObject* InPar
 	FEditorDelegates::OnAssetPreImport.Broadcast(this, InClass, InParent, InName, Type);
 
 	UDemoDialogue* NewAsset = NewObject<UDemoDialogue>(InParent, InName, Flags | RF_Transactional);
-    NewAsset->AssetImportData = NewObject<UAssetImportData>(NewAsset, TEXT("AssetImportData"));
 
-	const FString CurrentFilename = UFactory::GetCurrentFilename();
-	FString CurrentSourcePath;
-	FString FilenameNoExtension;
-	FString UnusedExtension;
-	FPaths::Split(CurrentFilename, CurrentSourcePath, FilenameNoExtension, UnusedExtension);
+	FString CurrentFilename = UFactory::GetCurrentFilename();
+    FString GameDir = FPaths::GameContentDir();
+
+    FString CurrentFilenameRelative = CurrentFilename;
+    FPaths::MakePathRelativeTo(CurrentFilenameRelative, *GameDir);
+    FPaths::CollapseRelativeDirectories(CurrentFilenameRelative);
+
+    NewAsset->ImportPath.Path = CurrentFilenameRelative;
 
 	// Convert buffer to an FString (will this be slow with big tables?)
 	FString String;
@@ -54,8 +56,6 @@ UObject* UDemoDialogueFactory::FactoryCreateText(UClass* InClass, UObject* InPar
 	StringChars.AddUninitialized(NumChars + 1);
 	FMemory::Memcpy(StringChars.GetData(), Buffer, NumChars*sizeof(TCHAR));
 	StringChars.Last() = 0;
-
-	NewAsset->AssetImportData->Update(CurrentFilename);
 
 	LoadFromText(NewAsset, String);
 
@@ -353,14 +353,11 @@ bool UDemoDialogueFactory::CanReimport(UObject* Obj, TArray<FString>& OutFilenam
 	UDemoDialogue* Dialogue = Cast<UDemoDialogue>(Obj);
     if (Dialogue)
     {
-        if (Dialogue->AssetImportData)
-        {
-            OutFilenames.Add(Dialogue->AssetImportData->GetFirstFilename());
-        }
-        else
-        {
-            OutFilenames.Add(TEXT(""));
-        }
+        FString GameDir = FPaths::GameContentDir();
+        FString CurrentFilenameRelative = Dialogue->ImportPath.Path;
+        FString Path = FPaths::ConvertRelativePathToFull(GameDir, CurrentFilenameRelative);
+
+        OutFilenames.Add(Path);
         return true;
     }
     return false;
@@ -371,7 +368,12 @@ void UDemoDialogueFactory::SetReimportPaths(UObject* Obj, const TArray<FString>&
 	UDemoDialogue* Dialogue = Cast<UDemoDialogue>(Obj);
     if (Dialogue && ensure(NewReimportPaths.Num() == 1))
     {
-        Dialogue->AssetImportData->UpdateFilenameOnly(NewReimportPaths[0]);
+        FString GameDir = FPaths::GameContentDir();
+        FString CurrentFilenameRelative = NewReimportPaths[0];
+        FPaths::MakePathRelativeTo(CurrentFilenameRelative, *GameDir);
+        FPaths::CollapseRelativeDirectories(CurrentFilenameRelative);
+
+        Dialogue->ImportPath.Path = CurrentFilenameRelative;
     }
 }
 
@@ -383,9 +385,10 @@ EReimportResult::Type UDemoDialogueFactory::Reimport(UObject* Obj)
 		return EReimportResult::Failed;
 	}
 
-    FString Path;
-    if (Dialogue->AssetImportData->ExtractFilenames().Num() > 0)
-        Path = Dialogue->AssetImportData->ExtractFilenames().Top();
+    FString GameDir = FPaths::GameContentDir();
+    FString CurrentFilenameRelative = Dialogue->ImportPath.Path;
+    FString Path = FPaths::ConvertRelativePathToFull(GameDir, CurrentFilenameRelative);
+
 	if (Path.IsEmpty() == false)
 	{
 		FString FilePath = IFileManager::Get().ConvertToRelativePath(*Path);
@@ -393,7 +396,7 @@ EReimportResult::Type UDemoDialogueFactory::Reimport(UObject* Obj)
 		FString Data;
 		if (FFileHelper::LoadFileToString(Data, *FilePath))
 		{
-            Dialogue->AssetImportData->Update(Dialogue->AssetImportData->GetFirstFilename());
+            Dialogue->ImportPath.Path = CurrentFilenameRelative;
 
 			LoadFromText(Dialogue, Data);
 
