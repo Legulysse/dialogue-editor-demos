@@ -12,7 +12,8 @@ class UDemoDialogueManager : public UObject, public FTickableGameObject
 
 public:
 
-	bool StartDialogue(const FDemoDialogueParams& Params);
+	UFUNCTION(BlueprintCallable, Category = Dialogue)
+	bool PlayDialogue(const FDemoDialogueParams& Params);
 
 protected:
 

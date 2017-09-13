@@ -13,9 +13,13 @@ class ADemoBaseCharacter : public ACharacter
 
 public:
 
+	UFUNCTION(BlueprintCallable, Category = Dialogue)
+	bool PlayDialogue(class UDemoDialogue* Dialogue);
+
     virtual void OnDialogueStarted(class UDemoDialogueInstance* DialogueInstance);
     virtual void OnDialogueFinished(class UDemoDialogueInstance* DialogueInstance);
 
+	UFUNCTION(BlueprintPure, Category = Dialogue)
     bool IsInDialogue() const;
 
 protected:

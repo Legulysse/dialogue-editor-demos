@@ -1,0 +1,50 @@
+{
+  "VersionProject": "1.0.0",
+  "VersionEditor": "1.0.0",
+  "PackageName": "Default",
+  "LastIndex": 2,
+  "SceneType": "Interactive",
+  "VoiceBank": "",
+  "Context": "",
+  "Comment": "",
+  "Camera": "",
+  "RootNodeID": 1,
+  "ListNodes": [
+    {
+      "$type": "NodeRoot",
+      "ID": 1,
+      "NextID": 2,
+      "Conditions": [],
+      "Actions": [],
+      "Flags": []
+    },
+    {
+      "$type": "NodeSentence",
+      "Sentence": "I'm busy doing nothing, please leave me alone.",
+      "SpeakerID": "ID_AI",
+      "ListenerID": "ID_Player",
+      "VoicingID": "VX_Ambient_Interjection_2",
+      "LastEditDate": "2017-09-13T11:51:24.3553508Z",
+      "HideSubtitle": false,
+      "Context": "",
+      "Comment": "",
+      "VoiceIntensity": "",
+      "SpeakerAnimset": "",
+      "ListenerAnimset": "",
+      "SpeakerAnim": "",
+      "ListenerAnim": "",
+      "PreDelay": 0.0,
+      "PostDelay": 0.0,
+      "Camera": "",
+      "ID": 2,
+      "NextID": -1,
+      "Conditions": [],
+      "Actions": [],
+      "Flags": []
+    }
+  ],
+  "ListAdditionalActors": [],
+  "Translations": {
+    "Entries": {}
+  }
+}

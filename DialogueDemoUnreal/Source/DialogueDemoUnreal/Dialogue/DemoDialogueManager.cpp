@@ -1,6 +1,7 @@
 #include "Dialogue/DemoDialogueManager.h"
 
 #include "Dialogue/DemoDialogueInstance.h"
+#include "Characters/DemoBaseCharacter.h"
 
 
 UDemoDialogueManager::UDemoDialogueManager(const FObjectInitializer& ObjectInitializer)
@@ -8,10 +9,15 @@ UDemoDialogueManager::UDemoDialogueManager(const FObjectInitializer& ObjectIniti
 {
 }
 
-bool UDemoDialogueManager::StartDialogue(const FDemoDialogueParams& Params)
+bool UDemoDialogueManager::PlayDialogue(const FDemoDialogueParams& Params)
 {
-    UDemoDialogueInstance* DialogueInstance = NewObject<UDemoDialogueInstance>(GetOuter());
+	for (ADemoBaseCharacter* Actor : Params.Actors)
+	{
+		if (Actor->IsInDialogue())
+			return false;
+	}
 
+    UDemoDialogueInstance* DialogueInstance = NewObject<UDemoDialogueInstance>(GetOuter());
 	if (!DialogueInstance->InitDialogue(Params))
 	{
 		return false;
