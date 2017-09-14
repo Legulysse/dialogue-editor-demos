@@ -39,6 +39,8 @@ bool UDemoDialogueInstance::InitDialogue(const FDemoDialogueParams& Params)
 
 void UDemoDialogueInstance::Start()
 {
+	APawn* PlayerCharacter = UGameplayStatics::GetPlayerPawn(GetOuter(), 0);
+
     for (ADemoBaseCharacter* Actor : Actors)
     {
         Actor->OnDialogueStarted(this);
@@ -149,11 +151,21 @@ void UDemoDialogueInstance::PlayNode(UDemoDialogueNode* NextNode)
     {
         UDemoDialogueNodeSentence* NodeSentence = Cast<UDemoDialogueNodeSentence>(CurrentNode);
 
+		// Subtitle
 		FDemoSentenceParams Params;
 		Params.SpeakerName = NodeSentence->SpeakerID;
 		Params.SentenceText = NodeSentence->Sentence;
 		Params.NodeSentence = NodeSentence;
 		GameInstance->HUD->DisplayDialogueSentence(Params);
+
+		// Animation
+		// TODO: Get characters from their ID
+		//if (SpeakerCharacter && ListenerCharacter)
+		//{
+		//	FRotator RotationSpeakerToListener = (ListenerCharacter->GetActorLocation() - SpeakerCharacter->GetActorLocation()).Rotation();
+		//	RotationSpeakerToListener.Pitch = 0;
+		//	SpeakerCharacter->SetActorRotation(RotationSpeakerToListener);
+		//}
 
         bWaitingDelay = true;
         DelayNextNode = 3.f;

@@ -61,6 +61,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = DemoCharacter)
+	TSubclassOf<class UDemoCharacterSheet> CharacterSheet;
+
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = DemoCharacter)
     class UDemoDialogueInstance* CurrentDialogueInstance;
 };
