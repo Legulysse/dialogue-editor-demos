@@ -18,4 +18,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AICharacter)
 	class UDemoDialogue* Dialogue;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AICharacter)
+	TSubclassOf<class ADemoDialoguePrefab> DialoguePrefabClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AICharacter)
+	class AActor* DialogueStagemark;
 };

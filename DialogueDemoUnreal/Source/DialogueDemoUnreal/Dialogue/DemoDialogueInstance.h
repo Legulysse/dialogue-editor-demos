@@ -13,6 +13,12 @@ struct FDemoDialogueParams
 
 	UPROPERTY(BlueprintReadWrite, Category = "Dialogue")
 	TArray<class ADemoBaseCharacter*> Actors;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Dialogue")
+	TSubclassOf<class ADemoDialoguePrefab> PrefabClass;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Dialogue")
+	class AActor* Stagemark;
 };
 
 UCLASS(BlueprintType)
@@ -41,13 +47,18 @@ protected:
     bool CheckNodeConditions(class UDemoDialogueNode* Node) const;
     void TriggerNodeActions(class UDemoDialogueNode* Node, bool bNodeStart);
 
+	void SelectCamera();
+
 public:
 
     UPROPERTY(Transient)
     class UDemoDialogue* Dialogue;
 
     UPROPERTY(Transient)
-    TArray<class ADemoBaseCharacter*> Actors;
+	TArray<class ADemoBaseCharacter*> Actors;
+
+	UPROPERTY(Transient)
+	class ADemoDialoguePrefab* Prefab;
 
 protected:
 

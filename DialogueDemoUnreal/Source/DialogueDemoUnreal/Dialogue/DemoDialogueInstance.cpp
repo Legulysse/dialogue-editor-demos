@@ -15,6 +15,8 @@
 #include "Assets/Conditions/DemoNodeCondition.h"
 #include "Assets/Flags/DemoNodeFlag.h"
 #include "Characters/DemoPlayerCharacter.h"
+#include "Dialogue/DemoDialogueCamera.h"
+#include "Dialogue/DemoDialoguePrefab.h"
 #include "UI/DemoHUD.h"
 
 
@@ -33,6 +35,14 @@ bool UDemoDialogueInstance::InitDialogue(const FDemoDialogueParams& Params)
 
 	Dialogue = Params.Dialogue;
 	Actors = Params.Actors;
+
+	UWorld* World = GetOuter()->GetWorld();
+	if (Params.PrefabClass && Params.Stagemark && World)
+	{
+		FTransform Transform = Params.Stagemark->GetTransform();
+		FActorSpawnParameters PrefabSpawnParams;
+		Prefab = Cast<ADemoDialoguePrefab>(World->SpawnActor(Params.PrefabClass, &Transform, PrefabSpawnParams));
+	}
 
 	return true;
 }
@@ -79,6 +89,16 @@ void UDemoDialogueInstance::Finalize()
 	for (ADemoBaseCharacter* Actor : Actors)
 	{
 		Actor->OnDialogueFinished(this);
+	}
+
+	APlayerController* Controller = UGameplayStatics::GetPlayerController(GetOuter(), 0);
+	if (Controller && Prefab)
+	{
+		FViewTargetTransitionParams Params;
+		Controller->SetViewTarget(Controller->GetPawn(), Params);
+
+		Prefab->Destroy();
+		Prefab = nullptr;
 	}
 }
 
@@ -167,6 +187,9 @@ void UDemoDialogueInstance::PlayNode(UDemoDialogueNode* NextNode)
 		//	SpeakerCharacter->SetActorRotation(RotationSpeakerToListener);
 		//}
 
+		// Camera
+		SelectCamera();
+
         bWaitingDelay = true;
         DelayNextNode = 3.f;
     }
@@ -252,4 +275,36 @@ void UDemoDialogueInstance::TriggerNodeActions(UDemoDialogueNode* Node, bool bNo
         if (Action->bOnNodeStart == bNodeStart)
             Action->Execute(NodeContext);
     }
+}
+
+void UDemoDialogueInstance::SelectCamera()
+{
+	if (!Prefab)
+		return;
+
+	APlayerController* Controller = UGameplayStatics::GetPlayerController(GetOuter(), 0);
+	if (!Controller)
+		return;
+
+	TArray<ADemoDialogueCamera*> Cameras;
+
+	TSet<UActorComponent*> Components = Prefab->GetComponents();
+	for (auto Component : Components)
+	{
+		UChildActorComponent* ChildActorComponent = Cast<UChildActorComponent>(Component);
+		if (ChildActorComponent)
+		{
+			ADemoDialogueCamera* Camera = Cast<ADemoDialogueCamera>(ChildActorComponent->GetChildActor());
+			if (Camera)
+			{
+				Cameras.AddUnique(Camera);
+			}
+		}
+	}
+
+	if (Cameras.Num() > 0)
+	{
+		FViewTargetTransitionParams Params;
+		Controller->SetViewTarget(Cameras[FMath::RandHelper(Cameras.Num())], Params);
+	}
 }

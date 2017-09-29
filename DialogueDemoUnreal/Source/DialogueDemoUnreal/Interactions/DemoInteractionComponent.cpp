@@ -51,6 +51,8 @@ void UDemoInteractionComponent::PlayerInteract(ADemoPlayerCharacter* Player)
 			Params.Dialogue = CharacterOwner->Dialogue;
 			Params.Actors.Add(Player);
 			Params.Actors.Add(CharacterOwner);
+			Params.PrefabClass = CharacterOwner->DialoguePrefabClass;
+			Params.Stagemark = CharacterOwner->DialogueStagemark;
 			GameInstance->DialogueManager->PlayDialogue(Params);
 		}
 	}
