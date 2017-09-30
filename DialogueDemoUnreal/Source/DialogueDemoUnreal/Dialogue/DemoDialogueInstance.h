@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Dialogue/DemoDialoguePrefab.h"
 #include "DemoDialogueInstance.generated.h"
 
 
@@ -19,6 +20,21 @@ struct FDemoDialogueParams
 
 	UPROPERTY(BlueprintReadWrite, Category = "Dialogue")
 	class AActor* Stagemark;
+};
+
+USTRUCT()
+struct FDemoDialogueRole
+{
+    GENERATED_BODY()
+
+    UPROPERTY(Transient)
+    FString ID;
+
+    UPROPERTY(Transient)
+    class ADemoBaseCharacter* Actor;
+
+    UPROPERTY(Transient)
+    EDemoDialoguePrefabPosition PrefabPosition;
 };
 
 UCLASS(BlueprintType)
@@ -47,7 +63,8 @@ protected:
     bool CheckNodeConditions(class UDemoDialogueNode* Node) const;
     void TriggerNodeActions(class UDemoDialogueNode* Node, bool bNodeStart);
 
-	void SelectCamera();
+    const FDemoDialogueRole* GetRole(FString ID);
+	void SelectCamera(const FString& SpeakerID);
 
 public:
 
@@ -55,7 +72,7 @@ public:
     class UDemoDialogue* Dialogue;
 
     UPROPERTY(Transient)
-	TArray<class ADemoBaseCharacter*> Actors;
+	TArray<FDemoDialogueRole> Roles;
 
 	UPROPERTY(Transient)
 	class ADemoDialoguePrefab* Prefab;

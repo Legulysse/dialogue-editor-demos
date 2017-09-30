@@ -15,6 +15,7 @@
 #include "Assets/Conditions/DemoNodeCondition.h"
 #include "Assets/Flags/DemoNodeFlag.h"
 #include "Characters/DemoPlayerCharacter.h"
+#include "Characters/DemoCharacterSheet.h"
 #include "Dialogue/DemoDialogueCamera.h"
 #include "Dialogue/DemoDialoguePrefab.h"
 #include "UI/DemoHUD.h"
@@ -34,8 +35,22 @@ bool UDemoDialogueInstance::InitDialogue(const FDemoDialogueParams& Params)
 		return false;
 
 	Dialogue = Params.Dialogue;
-	Actors = Params.Actors;
 
+    // Setup Roles and Characters
+    int32 IndexPrefabPosition = 0;
+    for (auto Actor : Params.Actors)
+    {
+        FDemoDialogueRole Role;
+        Role.Actor = Actor;
+        Role.PrefabPosition = (EDemoDialoguePrefabPosition)IndexPrefabPosition++;
+        if (Role.Actor && Role.Actor->CharacterSheet)
+        {
+            Role.ID = Role.Actor->CharacterSheet.GetDefaultObject()->ID;
+        }
+        Roles.Add(Role);
+    }
+
+    // Setup Prefab
 	UWorld* World = GetOuter()->GetWorld();
 	if (Params.PrefabClass && Params.Stagemark && World)
 	{
@@ -51,9 +66,9 @@ void UDemoDialogueInstance::Start()
 {
 	APawn* PlayerCharacter = UGameplayStatics::GetPlayerPawn(GetOuter(), 0);
 
-    for (ADemoBaseCharacter* Actor : Actors)
+    for (const auto& Role : Roles)
     {
-        Actor->OnDialogueStarted(this);
+        Role.Actor->OnDialogueStarted(this);
     }
 
 	if (Dialogue->RootNode && Dialogue->RootNode->IsA(UDemoDialogueNodeRoot::StaticClass()))
@@ -86,9 +101,9 @@ void UDemoDialogueInstance::Finalize()
         GameInstance->HUD->HideDialogueSentence();
 	}
 
-	for (ADemoBaseCharacter* Actor : Actors)
+    for (const auto& Role : Roles)
 	{
-		Actor->OnDialogueFinished(this);
+		Role.Actor->OnDialogueFinished(this);
 	}
 
 	APlayerController* Controller = UGameplayStatics::GetPlayerController(GetOuter(), 0);
@@ -171,11 +186,19 @@ void UDemoDialogueInstance::PlayNode(UDemoDialogueNode* NextNode)
     {
         UDemoDialogueNodeSentence* NodeSentence = Cast<UDemoDialogueNodeSentence>(CurrentNode);
 
+        const FDemoDialogueRole* RoleSpeaker = GetRole(NodeSentence->SpeakerID);
+
 		// Subtitle
 		FDemoSentenceParams Params;
 		Params.SpeakerName = NodeSentence->SpeakerID;
 		Params.SentenceText = NodeSentence->Sentence;
 		Params.NodeSentence = NodeSentence;
+
+        if (RoleSpeaker && RoleSpeaker->Actor && RoleSpeaker->Actor->CharacterSheet)
+        {
+            Params.SpeakerName = RoleSpeaker->Actor->CharacterSheet.GetDefaultObject()->DisplayName;
+        }
+
 		GameInstance->HUD->DisplayDialogueSentence(Params);
 
 		// Animation
@@ -188,7 +211,7 @@ void UDemoDialogueInstance::PlayNode(UDemoDialogueNode* NextNode)
 		//}
 
 		// Camera
-		SelectCamera();
+		SelectCamera(NodeSentence->SpeakerID);
 
         bWaitingDelay = true;
         DelayNextNode = 3.f;
@@ -277,7 +300,19 @@ void UDemoDialogueInstance::TriggerNodeActions(UDemoDialogueNode* Node, bool bNo
     }
 }
 
-void UDemoDialogueInstance::SelectCamera()
+const FDemoDialogueRole* UDemoDialogueInstance::GetRole(FString ID)
+{
+    for (const auto& Role : Roles)
+    {
+        if (Role.ID == ID)
+        {
+            return &Role;
+        }
+    }
+    return nullptr;
+}
+
+void UDemoDialogueInstance::SelectCamera(const FString& SpeakerID)
 {
 	if (!Prefab)
 		return;
@@ -286,7 +321,13 @@ void UDemoDialogueInstance::SelectCamera()
 	if (!Controller)
 		return;
 
-	TArray<ADemoDialogueCamera*> Cameras;
+    EDemoDialoguePrefabPosition SpeakerPosition = EDemoDialoguePrefabPosition::Character_01;
+    if (const FDemoDialogueRole* Role = GetRole(SpeakerID))
+    {
+        SpeakerPosition = Role->PrefabPosition;
+    }
+
+    TArray<ADemoDialogueCamera*> PreferredCameras;
 
 	TSet<UActorComponent*> Components = Prefab->GetComponents();
 	for (auto Component : Components)
@@ -295,16 +336,16 @@ void UDemoDialogueInstance::SelectCamera()
 		if (ChildActorComponent)
 		{
 			ADemoDialogueCamera* Camera = Cast<ADemoDialogueCamera>(ChildActorComponent->GetChildActor());
-			if (Camera)
+			if (Camera && Camera->Speaker == SpeakerPosition)
 			{
-				Cameras.AddUnique(Camera);
+                PreferredCameras.AddUnique(Camera);
 			}
 		}
 	}
 
-	if (Cameras.Num() > 0)
+	if (PreferredCameras.Num() > 0)
 	{
 		FViewTargetTransitionParams Params;
-		Controller->SetViewTarget(Cameras[FMath::RandHelper(Cameras.Num())], Params);
+		Controller->SetViewTarget(PreferredCameras[FMath::RandHelper(PreferredCameras.Num())], Params);
 	}
 }
