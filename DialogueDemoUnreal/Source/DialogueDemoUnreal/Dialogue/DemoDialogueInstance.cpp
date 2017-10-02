@@ -57,6 +57,24 @@ bool UDemoDialogueInstance::InitDialogue(const FDemoDialogueParams& Params)
 		FTransform Transform = Params.Stagemark->GetTransform();
 		FActorSpawnParameters PrefabSpawnParams;
 		Prefab = Cast<ADemoDialoguePrefab>(World->SpawnActor(Params.PrefabClass, &Transform, PrefabSpawnParams));
+
+		// Place characters on their position
+		if (Prefab)
+		{
+			TSet<UActorComponent*> Components = Prefab->GetComponents();
+			for (auto Component : Components)
+			{
+				UDemoDialoguePrefabRolePosition* RolePositionComponent = Cast<UDemoDialoguePrefabRolePosition>(Component);
+				if (RolePositionComponent)
+				{
+					const FDemoDialogueRole* Role = GetRoleFromPosition(RolePositionComponent->Position);
+					if (Role && Role->Actor)
+					{
+						Role->Actor->TeleportTo(FVector(0, 0, Role->Actor->GetDefaultHalfHeight()) + RolePositionComponent->GetComponentLocation(), RolePositionComponent->GetComponentRotation(), false, true);
+					}
+				}
+			}
+		}
 	}
 
 	return true;
@@ -310,6 +328,18 @@ const FDemoDialogueRole* UDemoDialogueInstance::GetRole(FString ID)
         }
     }
     return nullptr;
+}
+
+const FDemoDialogueRole* UDemoDialogueInstance::GetRoleFromPosition(EDemoDialoguePrefabPosition Position)
+{
+	for (const auto& Role : Roles)
+	{
+		if (Role.PrefabPosition == Position)
+		{
+			return &Role;
+		}
+	}
+	return nullptr;
 }
 
 void UDemoDialogueInstance::SelectCamera(const FString& SpeakerID)

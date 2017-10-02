@@ -63,7 +63,9 @@ protected:
     bool CheckNodeConditions(class UDemoDialogueNode* Node) const;
     void TriggerNodeActions(class UDemoDialogueNode* Node, bool bNodeStart);
 
-    const FDemoDialogueRole* GetRole(FString ID);
+	const FDemoDialogueRole* GetRole(FString ID);
+	const FDemoDialogueRole* GetRoleFromPosition(EDemoDialoguePrefabPosition Position);
+
 	void SelectCamera(const FString& SpeakerID);
 
 public:
