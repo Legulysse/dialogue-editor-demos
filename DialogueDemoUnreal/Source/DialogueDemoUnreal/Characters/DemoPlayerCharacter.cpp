@@ -81,14 +81,22 @@ void ADemoPlayerCharacter::OnDialogueReply(int32 ReplyIndex)
     }
 }
 
-void ADemoPlayerCharacter::OnDialogueStarted(class UDemoDialogueInstance* DialogueInstance)
+void ADemoPlayerCharacter::OnDialogueStarted(class UDemoDialogueInstance* DialogueInstance, bool bLock)
 {
-    Super::OnDialogueStarted(DialogueInstance);
+    Super::OnDialogueStarted(DialogueInstance, bLock);
 }
 
 void ADemoPlayerCharacter::OnDialogueFinished(class UDemoDialogueInstance* DialogueInstance)
 {
     Super::OnDialogueFinished(DialogueInstance);
+}
+
+void ADemoPlayerCharacter::Jump()
+{
+	if (bLockForDialogue)
+		return;
+
+	Super::Jump();
 }
 
 void ADemoPlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -118,11 +126,4 @@ void ADemoPlayerCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAxis("TurnRate", this, &ADemoPlayerCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ADemoPlayerCharacter::LookUpAtRate);
-
-	// handle touch devices
-	PlayerInputComponent->BindTouch(IE_Pressed, this, &ADemoPlayerCharacter::TouchStarted);
-	PlayerInputComponent->BindTouch(IE_Released, this, &ADemoPlayerCharacter::TouchStopped);
-
-	// VR headset functionality
-	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ADemoPlayerCharacter::OnResetVR);
 }

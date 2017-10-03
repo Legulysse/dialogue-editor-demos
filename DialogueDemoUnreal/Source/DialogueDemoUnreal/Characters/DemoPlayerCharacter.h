@@ -13,7 +13,7 @@ class ADemoPlayerCharacter : public ADemoBaseCharacter
 
 public:
 
-    virtual void OnDialogueStarted(class UDemoDialogueInstance* DialogueInstance) override;
+    virtual void OnDialogueStarted(class UDemoDialogueInstance* DialogueInstance, bool bLock) override;
     virtual void OnDialogueFinished(class UDemoDialogueInstance* DialogueInstance) override;
 
 	/** Returns CameraBoom subobject **/
@@ -38,6 +38,7 @@ protected:
 	// APawn interface
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void Jump() override;
 
 public:
 

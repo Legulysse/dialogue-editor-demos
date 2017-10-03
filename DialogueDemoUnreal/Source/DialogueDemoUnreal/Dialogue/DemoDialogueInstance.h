@@ -68,7 +68,7 @@ protected:
 
 	void SelectCamera(const FString& SpeakerID);
 
-public:
+protected:
 
     UPROPERTY(Transient)
     class UDemoDialogue* Dialogue;
@@ -78,6 +78,9 @@ public:
 
 	UPROPERTY(Transient)
 	class ADemoDialoguePrefab* Prefab;
+
+	UPROPERTY(Transient)
+	bool bUseCameras;
 
 protected:
 

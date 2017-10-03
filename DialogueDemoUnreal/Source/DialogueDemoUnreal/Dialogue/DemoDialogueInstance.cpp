@@ -23,6 +23,7 @@
 
 UDemoDialogueInstance::UDemoDialogueInstance(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
+	, bUseCameras(false)
     , bWaitingDelay(false)
     , DelayNextNode(0.f)
     , bFinished(false)
@@ -61,6 +62,8 @@ bool UDemoDialogueInstance::InitDialogue(const FDemoDialogueParams& Params)
 		// Place characters on their position
 		if (Prefab)
 		{
+			bUseCameras = true;
+
 			TSet<UActorComponent*> Components = Prefab->GetComponents();
 			for (auto Component : Components)
 			{
@@ -84,9 +87,10 @@ void UDemoDialogueInstance::Start()
 {
 	APawn* PlayerCharacter = UGameplayStatics::GetPlayerPawn(GetOuter(), 0);
 
+	bool bLockCharacters = bUseCameras;
     for (const auto& Role : Roles)
     {
-        Role.Actor->OnDialogueStarted(this);
+        Role.Actor->OnDialogueStarted(this, bLockCharacters);
     }
 
 	if (Dialogue->RootNode && Dialogue->RootNode->IsA(UDemoDialogueNodeRoot::StaticClass()))
@@ -127,8 +131,11 @@ void UDemoDialogueInstance::Finalize()
 	APlayerController* Controller = UGameplayStatics::GetPlayerController(GetOuter(), 0);
 	if (Controller && Prefab)
 	{
-		FViewTargetTransitionParams Params;
-		Controller->SetViewTarget(Controller->GetPawn(), Params);
+		if (bUseCameras)
+		{
+			FViewTargetTransitionParams Params;
+			Controller->SetViewTarget(Controller->GetPawn(), Params);
+		}
 
 		Prefab->Destroy();
 		Prefab = nullptr;
@@ -344,7 +351,7 @@ const FDemoDialogueRole* UDemoDialogueInstance::GetRoleFromPosition(EDemoDialogu
 
 void UDemoDialogueInstance::SelectCamera(const FString& SpeakerID)
 {
-	if (!Prefab)
+	if (!Prefab || !bUseCameras)
 		return;
 
 	APlayerController* Controller = UGameplayStatics::GetPlayerController(GetOuter(), 0);

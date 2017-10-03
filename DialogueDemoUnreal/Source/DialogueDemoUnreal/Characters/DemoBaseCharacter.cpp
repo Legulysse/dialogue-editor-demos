@@ -3,7 +3,6 @@
 #include "Characters/DemoBaseCharacter.h"
 
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/HeadMountedDisplayFunctionLibrary.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -36,6 +35,8 @@ ADemoBaseCharacter::ADemoBaseCharacter(const FObjectInitializer& ObjectInitializ
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+	bLockForDialogue = false;
 }
 
 bool ADemoBaseCharacter::PlayDialogue(class UDemoDialogue* Dialogue)
@@ -53,14 +54,16 @@ bool ADemoBaseCharacter::PlayDialogue(class UDemoDialogue* Dialogue)
 	return false;
 }
 
-void ADemoBaseCharacter::OnDialogueStarted(class UDemoDialogueInstance* DialogueInstance)
+void ADemoBaseCharacter::OnDialogueStarted(class UDemoDialogueInstance* DialogueInstance, bool bLock)
 {
     CurrentDialogueInstance = DialogueInstance;
+	bLockForDialogue = bLock;
 }
 
 void ADemoBaseCharacter::OnDialogueFinished(class UDemoDialogueInstance* DialogueInstance)
 {
 	CurrentDialogueInstance = nullptr;
+	bLockForDialogue = false;
 }
 
 bool ADemoBaseCharacter::IsInDialogue() const
@@ -68,35 +71,29 @@ bool ADemoBaseCharacter::IsInDialogue() const
     return CurrentDialogueInstance != nullptr;
 }
 
-void ADemoBaseCharacter::OnResetVR()
-{
-	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
-}
-
-void ADemoBaseCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
-{
-		Jump();
-}
-
-void ADemoBaseCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
-{
-		StopJumping();
-}
-
 void ADemoBaseCharacter::TurnAtRate(float Rate)
 {
+	if (bLockForDialogue)
+		return;
+
 	// calculate delta for this frame from the rate information
 	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
 void ADemoBaseCharacter::LookUpAtRate(float Rate)
 {
+	if (bLockForDialogue)
+		return;
+
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
 void ADemoBaseCharacter::MoveForward(float Value)
 {
+	if (bLockForDialogue)
+		return;
+
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
 		// find out which way is forward
@@ -111,6 +108,9 @@ void ADemoBaseCharacter::MoveForward(float Value)
 
 void ADemoBaseCharacter::MoveRight(float Value)
 {
+	if (bLockForDialogue)
+		return;
+
 	if ( (Controller != NULL) && (Value != 0.0f) )
 	{
 		// find out which way is right
