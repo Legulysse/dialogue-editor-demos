@@ -3,11 +3,12 @@
   "VersionEditor": "1.0.0",
   "PackageName": "Default",
   "LastIndex": 2,
-  "SceneType": "Interactive",
+  "SceneType": "Ambient",
   "VoiceBank": "",
   "Context": "",
   "Comment": "",
   "Camera": "",
+  "CameraBlendTime": -1.0,
   "RootNodeID": 1,
   "ListNodes": [
     {
@@ -21,7 +22,7 @@
     {
       "$type": "NodeSentence",
       "Sentence": "I'm busy doing nothing, please leave me alone.",
-      "SpeakerID": "ID_AI",
+      "SpeakerID": "ID_AI_01",
       "ListenerID": "ID_Player",
       "VoicingID": "VX_Ambient_Interjection_2",
       "LastEditDate": "2017-09-13T11:51:24.3553508Z",
@@ -36,6 +37,7 @@
       "PreDelay": 0.0,
       "PostDelay": 0.0,
       "Camera": "",
+      "CameraBlendTime": -1.0,
       "ID": 2,
       "NextID": -1,
       "Conditions": [],

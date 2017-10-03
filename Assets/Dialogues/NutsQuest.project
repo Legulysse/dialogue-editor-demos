@@ -47,8 +47,22 @@
       "Color": -13676721
     },
     {
-      "ID": "ID_AI",
-      "Name": "AI",
+      "ID": "ID_AI_01",
+      "Name": "AI 01",
+      "Species": "Undefined",
+      "Gender": "Undefined",
+      "Build": "Undefined",
+      "Age": 30,
+      "Height": 170,
+      "Personality": "",
+      "Description": "",
+      "VoiceKit": "",
+      "Portrait": "Pictures\\AI.png",
+      "Color": -13676721
+    },
+    {
+      "ID": "ID_AI_02",
+      "Name": "AI 02",
       "Species": "Undefined",
       "Gender": "Undefined",
       "Build": "Undefined",
