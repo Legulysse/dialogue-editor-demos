@@ -41,6 +41,12 @@ ADemoBaseCharacter::ADemoBaseCharacter(const FObjectInitializer& ObjectInitializ
 
 bool ADemoBaseCharacter::PlayDialogue(class UDemoDialogue* Dialogue)
 {
+	TArray<class ADemoBaseCharacter*> OtherActors;
+	return PlayDialogueWithActors(Dialogue, OtherActors);
+}
+
+bool ADemoBaseCharacter::PlayDialogueWithActors(class UDemoDialogue* Dialogue, const TArray<class ADemoBaseCharacter*>& OtherActors)
+{
 	UDemoGameInstance* GameInstance = Cast<UDemoGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
 	if (GameInstance && GameInstance->DialogueManager)
@@ -48,6 +54,7 @@ bool ADemoBaseCharacter::PlayDialogue(class UDemoDialogue* Dialogue)
 		FDemoDialogueParams Params;
 		Params.Dialogue = Dialogue;
 		Params.Actors.Add(this);
+		Params.Actors.Append(OtherActors);
 		return GameInstance->DialogueManager->PlayDialogue(Params);
 	}
 

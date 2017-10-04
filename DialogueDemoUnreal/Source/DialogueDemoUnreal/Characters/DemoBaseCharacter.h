@@ -15,6 +15,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Dialogue)
 	bool PlayDialogue(class UDemoDialogue* Dialogue);
+	UFUNCTION(BlueprintCallable, Category = Dialogue)
+	bool PlayDialogueWithActors(class UDemoDialogue* Dialogue, const TArray<class ADemoBaseCharacter*>& OtherActors);
 
     virtual void OnDialogueStarted(class UDemoDialogueInstance* DialogueInstance, bool bLock);
     virtual void OnDialogueFinished(class UDemoDialogueInstance* DialogueInstance);
