@@ -24,6 +24,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = Dialogue)
     bool IsInDialogue() const;
 
+	UFUNCTION(BlueprintPure, Category = Demo)
+	virtual FRotator GetLookAtDirection() const;
+
 protected:
 
 	/** Called for forwards/backward input */

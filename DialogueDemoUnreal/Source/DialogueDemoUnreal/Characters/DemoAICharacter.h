@@ -13,6 +13,10 @@ class ADemoAICharacter : public ADemoBaseCharacter
 
 public:
 
+	virtual FRotator GetLookAtDirection() const override;
+
+public:
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = AICharacter)
 	class UDemoInteractionComponent* InteractionComp;
 

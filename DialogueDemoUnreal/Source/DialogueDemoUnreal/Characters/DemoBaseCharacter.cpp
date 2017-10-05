@@ -78,6 +78,13 @@ bool ADemoBaseCharacter::IsInDialogue() const
     return CurrentDialogueInstance != nullptr;
 }
 
+FRotator ADemoBaseCharacter::GetLookAtDirection() const
+{
+	FRotator LookAtDirection = GetActorRotation();
+	LookAtDirection.Roll = 0;
+	return LookAtDirection;
+}
+
 void ADemoBaseCharacter::TurnAtRate(float Rate)
 {
 	if (bLockForDialogue)
