@@ -54,6 +54,7 @@ public:
 
 	void PlayNextNode();
     bool ValidateReply(int32 ReplyIndex);
+	void SkipCurrentNode();
 
 protected:
 

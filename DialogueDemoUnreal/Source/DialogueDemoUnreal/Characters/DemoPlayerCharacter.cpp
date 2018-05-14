@@ -73,6 +73,14 @@ void ADemoPlayerCharacter::OnInteract()
 	}
 }
 
+void ADemoPlayerCharacter::OnDialogueSkip()
+{
+	if (CurrentDialogueInstance)
+	{
+		CurrentDialogueInstance->SkipCurrentNode();
+	}
+}
+
 void ADemoPlayerCharacter::OnDialogueReply(int32 ReplyIndex)
 {
     if (CurrentDialogueInstance)
@@ -108,6 +116,7 @@ void ADemoPlayerCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ADemoPlayerCharacter::OnInteract);
+	PlayerInputComponent->BindAction("DialogueSkip", IE_Pressed, this, &ADemoPlayerCharacter::OnDialogueSkip);
 
     PlayerInputComponent->BindAction("Reply1", IE_Pressed, this, &ADemoPlayerCharacter::OnDialogueReply<0>);
     PlayerInputComponent->BindAction("Reply2", IE_Pressed, this, &ADemoPlayerCharacter::OnDialogueReply<1>);

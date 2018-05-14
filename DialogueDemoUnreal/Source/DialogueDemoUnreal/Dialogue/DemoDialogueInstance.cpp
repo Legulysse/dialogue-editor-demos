@@ -163,12 +163,23 @@ void UDemoDialogueInstance::Tick(float DeltaTime)
     }
 }
 
+void UDemoDialogueInstance::SkipCurrentNode()
+{
+	if (!CurrentNode)
+		return;
+
+	if (CurrentNode->IsA(UDemoDialogueNodeSentence::StaticClass()))
+	{
+		PlayNextNode();
+	}
+}
+
 void UDemoDialogueInstance::PlayNextNode()
 {
 	if (!CurrentNode)
 		return;
 
-    PlayNode(CurrentNode->Next);
+	PlayNode(CurrentNode->Next);
 }
 
 void UDemoDialogueInstance::PlayNode(UDemoDialogueNode* NextNode)
