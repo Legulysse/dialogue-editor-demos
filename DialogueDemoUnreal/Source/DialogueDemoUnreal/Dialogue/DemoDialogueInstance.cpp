@@ -247,7 +247,7 @@ void UDemoDialogueInstance::PlayNode(UDemoDialogueNode* NextNode)
 		//}
 
 		// Camera
-		SelectCamera(NodeSentence->SpeakerID);
+		SelectCamera(NodeSentence->SpeakerID, NodeSentence->ListenerID);
 
         bWaitingDelay = true;
         DelayNextNode = 3.f;
@@ -360,7 +360,7 @@ const FDemoDialogueRole* UDemoDialogueInstance::GetRoleFromPosition(EDemoDialogu
 	return nullptr;
 }
 
-void UDemoDialogueInstance::SelectCamera(const FString& SpeakerID)
+void UDemoDialogueInstance::SelectCamera(const FString& SpeakerID, const FString& ListenerID)
 {
 	if (!Prefab || !bUseCameras)
 		return;
@@ -375,6 +375,12 @@ void UDemoDialogueInstance::SelectCamera(const FString& SpeakerID)
         SpeakerPosition = Role->PrefabPosition;
     }
 
+	EDemoDialoguePrefabPosition ListenerPosition = EDemoDialoguePrefabPosition::Character_02;
+	if (const FDemoDialogueRole* Role = GetRole(ListenerID))
+	{
+		ListenerPosition = Role->PrefabPosition;
+	}
+
     TArray<ADemoDialogueCamera*> PreferredCameras;
 
 	TSet<UActorComponent*> Components = Prefab->GetComponents();
@@ -384,7 +390,7 @@ void UDemoDialogueInstance::SelectCamera(const FString& SpeakerID)
 		if (ChildActorComponent)
 		{
 			ADemoDialogueCamera* Camera = Cast<ADemoDialogueCamera>(ChildActorComponent->GetChildActor());
-			if (Camera && Camera->Speaker == SpeakerPosition)
+			if (Camera && Camera->Speaker == SpeakerPosition && Camera->Listener == ListenerPosition)
 			{
                 PreferredCameras.AddUnique(Camera);
 			}

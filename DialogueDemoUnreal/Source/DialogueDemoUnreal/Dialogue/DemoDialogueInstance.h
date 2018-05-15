@@ -67,7 +67,7 @@ protected:
 	const FDemoDialogueRole* GetRole(FString ID);
 	const FDemoDialogueRole* GetRoleFromPosition(EDemoDialoguePrefabPosition Position);
 
-	void SelectCamera(const FString& SpeakerID);
+	void SelectCamera(const FString& SpeakerID, const FString& ListenerID);
 
 protected:
 
