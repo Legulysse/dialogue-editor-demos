@@ -19,27 +19,27 @@ class DIALOGUEDEMOUNREAL_API UDemoDialogue : public UObject
 
 public:
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category="Dialogue")
     FString Version;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category="Dialogue")
     EDemoDialogueSceneType SceneType;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category="Dialogue")
     FString VoiceBank;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category="Dialogue")
     int32 RootNodeID;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category="Dialogue")
     class UDemoDialogueNode* RootNode;
 
-    UPROPERTY(VisibleAnywhere, Instanced)
+    UPROPERTY(VisibleAnywhere, Instanced, Category="Dialogue")
     TArray< class UDemoDialogueNode* > ListNodes;
 
 #if WITH_EDITORONLY_DATA
 
-    UPROPERTY(VisibleAnywhere, meta = (RelativeToGameContentDir))
+    UPROPERTY(VisibleAnywhere, meta = (RelativeToGameContentDir), Category="Dialogue")
     FDirectoryPath ImportPath;
 
 #endif // WITH_EDITORONLY_DATA

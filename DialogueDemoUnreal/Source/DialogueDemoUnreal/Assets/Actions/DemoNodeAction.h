@@ -24,6 +24,6 @@ public:
 
 public:
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category="Dialogue")
     bool bOnNodeStart;
 };

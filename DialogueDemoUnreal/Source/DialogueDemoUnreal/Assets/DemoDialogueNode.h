@@ -10,21 +10,21 @@ class DIALOGUEDEMOUNREAL_API UDemoDialogueNode : public UObject
 
 public:
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Dialogue")
 	int32 ID;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Dialogue")
 	int32 NextID;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Dialogue")
     UDemoDialogueNode* Next;
 
-    UPROPERTY(VisibleAnywhere, Instanced)
+    UPROPERTY(VisibleAnywhere, Instanced, Category="Dialogue")
     TArray< class UDemoNodeCondition* > Conditions;
 
-    UPROPERTY(VisibleAnywhere, Instanced)
+    UPROPERTY(VisibleAnywhere, Instanced, Category="Dialogue")
     TArray< class UDemoNodeAction* > Actions;
 
-    UPROPERTY(VisibleAnywhere, Instanced)
+    UPROPERTY(VisibleAnywhere, Instanced, Category="Dialogue")
     TArray< class UDemoNodeFlag* > Flags;
 };

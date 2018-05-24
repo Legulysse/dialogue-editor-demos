@@ -11,9 +11,9 @@ class DIALOGUEDEMOUNREAL_API UDemoDialogueNodeBranch : public UDemoDialogueNode
 
 public:
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Dialogue")
 	int32 BranchID;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Dialogue")
     UDemoDialogueNode* Branch;
 };

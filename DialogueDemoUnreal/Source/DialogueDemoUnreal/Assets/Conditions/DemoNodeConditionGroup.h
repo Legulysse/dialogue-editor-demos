@@ -15,6 +15,6 @@ public:
 
 public:
 
-    UPROPERTY(VisibleAnywhere, Instanced)
+    UPROPERTY(VisibleAnywhere, Instanced, Category="Dialogue")
     TArray< class UDemoNodeCondition* > Conditions;
 };

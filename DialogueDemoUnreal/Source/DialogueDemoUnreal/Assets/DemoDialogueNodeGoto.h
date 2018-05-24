@@ -11,9 +11,9 @@ class DIALOGUEDEMOUNREAL_API UDemoDialogueNodeGoto : public UDemoDialogueNode
 
 public:
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Dialogue")
 	int32 GotoID;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Dialogue")
 	UDemoDialogueNode* Goto;
 };

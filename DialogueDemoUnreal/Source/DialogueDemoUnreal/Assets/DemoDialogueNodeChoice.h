@@ -11,7 +11,7 @@ class DIALOGUEDEMOUNREAL_API UDemoDialogueNodeChoice : public UDemoDialogueNode
 
 public:
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Dialogue")
 	TArray< int32 > RepliesIDs;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dialogue")

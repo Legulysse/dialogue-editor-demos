@@ -38,14 +38,14 @@ UObject* UDemoDialogueFactory::FactoryCreateText(UClass* InClass, UObject* InPar
 
 	UDemoDialogue* NewAsset = NewObject<UDemoDialogue>(InParent, InName, Flags | RF_Transactional);
 
-	FString CurrentFilename = UFactory::GetCurrentFilename();
+	FString Filename = UFactory::GetCurrentFilename();
     FString GameDir = FPaths::GameContentDir();
 
-    FString CurrentFilenameRelative = CurrentFilename;
-    FPaths::MakePathRelativeTo(CurrentFilenameRelative, *GameDir);
-    FPaths::CollapseRelativeDirectories(CurrentFilenameRelative);
+    FString FilenameRelative = Filename;
+    FPaths::MakePathRelativeTo(FilenameRelative, *GameDir);
+    FPaths::CollapseRelativeDirectories(FilenameRelative);
 
-    NewAsset->ImportPath.Path = CurrentFilenameRelative;
+    NewAsset->ImportPath.Path = FilenameRelative;
 
 	// Convert buffer to an FString (will this be slow with big tables?)
 	FString String;

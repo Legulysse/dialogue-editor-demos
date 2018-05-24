@@ -11,30 +11,30 @@ class DIALOGUEDEMOUNREAL_API UDemoDialogueNodeSentence : public UDemoDialogueNod
 
 public:
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Dialogue")
 	FString Sentence;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category="Dialogue")
     FString SpeakerID;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category="Dialogue")
     FString ListenerID;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category="Dialogue")
     FString VoicingID;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category="Dialogue")
     bool bHideSubtitle;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category="Dialogue")
     FString SpeakerAnimset;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category="Dialogue")
     FString ListenerAnimset;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category="Dialogue")
     FString SpeakerAnim;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category="Dialogue")
     FString ListenerAnim;
 };
