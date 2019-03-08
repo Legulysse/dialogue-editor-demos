@@ -73,3 +73,6 @@
 
 # Cache files for the editor to use
 */DerivedDataCache/*
+DialogueDemoUnity/Library/*
+DialogueDemoUnity/Logs/*
+DialogueDemoUnity/Temp/*
