@@ -4,14 +4,14 @@
 #include "Modules/ModuleManager.h"
 #include "DemoAssetTypeActionDialogue.h"
 
-IMPLEMENT_MODULE( IDemoDialogueEditor, DemoDialogueEditor);
+IMPLEMENT_MODULE(DialogueDemoUnrealEditor, DialogueDemoUnrealEditor);
  
-void IDemoDialogueEditor::StartupModule()
+void DialogueDemoUnrealEditor::StartupModule()
 {
 	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
 	AssetTools.RegisterAssetTypeActions(MakeShareable(new FDemoAssetTypeActionDialogue));
 }
 
-void IDemoDialogueEditor::ShutdownModule()
+void DialogueDemoUnrealEditor::ShutdownModule()
 {
 }

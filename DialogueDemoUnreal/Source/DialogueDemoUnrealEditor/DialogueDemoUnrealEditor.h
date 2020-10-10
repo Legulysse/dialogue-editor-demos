@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-class IDemoDialogueEditor : public IModuleInterface //, public IModularFeature
+class DialogueDemoUnrealEditor : public IModuleInterface //, public IModularFeature
 {
 
 public:
@@ -19,9 +19,9 @@ public:
 	*
 	* @return Returns singleton instance, loading the module on demand if needed
 	*/
-	static inline IDemoDialogueEditor& Get()
+	static inline DialogueDemoUnrealEditor& Get()
 	{
-		return FModuleManager::LoadModuleChecked< IDemoDialogueEditor >( "DemoDialogueEditor" );
+		return FModuleManager::LoadModuleChecked< DialogueDemoUnrealEditor >( "DialogueDemoUnrealEditor" );
 	}
 
 	/**
@@ -31,6 +31,6 @@ public:
 	*/
 	static inline bool IsAvailable()
 	{
-		return FModuleManager::Get().IsModuleLoaded( "DemoDialogueEditor" );
+		return FModuleManager::Get().IsModuleLoaded( "DialogueDemoUnrealEditor" );
 	}
 };

@@ -39,7 +39,7 @@ void FDemoAssetTypeActionDialogue::GetResolvedSourceFilePaths(const TArray<UObje
     {
         const auto Dialogue = CastChecked<UDemoDialogue>(Asset);
 
-        FString GameDir = FPaths::GameContentDir();
+        FString GameDir = FPaths::ProjectContentDir();
         FString CurrentFilenameRelative = Dialogue->ImportPath.Path;
         FString Path = FPaths::ConvertRelativePathToFull(GameDir, CurrentFilenameRelative);
 

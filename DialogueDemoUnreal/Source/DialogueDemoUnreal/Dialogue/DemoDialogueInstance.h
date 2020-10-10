@@ -4,7 +4,7 @@
 #include "DemoDialogueInstance.generated.h"
 
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FDemoDialogueParams
 {
 	GENERATED_BODY()

@@ -39,7 +39,7 @@ UObject* UDemoDialogueFactory::FactoryCreateText(UClass* InClass, UObject* InPar
 	UDemoDialogue* NewAsset = NewObject<UDemoDialogue>(InParent, InName, Flags | RF_Transactional);
 
 	FString Filename = UFactory::GetCurrentFilename();
-    FString GameDir = FPaths::GameContentDir();
+    FString GameDir = FPaths::ProjectContentDir();
 
     FString FilenameRelative = Filename;
     FPaths::MakePathRelativeTo(FilenameRelative, *GameDir);
@@ -353,7 +353,7 @@ bool UDemoDialogueFactory::CanReimport(UObject* Obj, TArray<FString>& OutFilenam
 	UDemoDialogue* Dialogue = Cast<UDemoDialogue>(Obj);
     if (Dialogue)
     {
-        FString GameDir = FPaths::GameContentDir();
+        FString GameDir = FPaths::ProjectContentDir();
         FString CurrentFilenameRelative = Dialogue->ImportPath.Path;
         FString Path = FPaths::ConvertRelativePathToFull(GameDir, CurrentFilenameRelative);
 
@@ -368,7 +368,7 @@ void UDemoDialogueFactory::SetReimportPaths(UObject* Obj, const TArray<FString>&
 	UDemoDialogue* Dialogue = Cast<UDemoDialogue>(Obj);
     if (Dialogue && ensure(NewReimportPaths.Num() == 1))
     {
-        FString GameDir = FPaths::GameContentDir();
+        FString GameDir = FPaths::ProjectContentDir();
         FString CurrentFilenameRelative = NewReimportPaths[0];
         FPaths::MakePathRelativeTo(CurrentFilenameRelative, *GameDir);
         FPaths::CollapseRelativeDirectories(CurrentFilenameRelative);
@@ -385,7 +385,7 @@ EReimportResult::Type UDemoDialogueFactory::Reimport(UObject* Obj)
 		return EReimportResult::Failed;
 	}
 
-    FString GameDir = FPaths::GameContentDir();
+    FString GameDir = FPaths::ProjectContentDir();
     FString CurrentFilenameRelative = Dialogue->ImportPath.Path;
     FString Path = FPaths::ConvertRelativePathToFull(GameDir, CurrentFilenameRelative);
 
